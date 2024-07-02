@@ -1,6 +1,6 @@
-# MPC3000 - Virtual Drum Machine & Sampler
+# MPC3000 - Virtual Drum Machine & Sampler UI
 
-A virtual drum machine and sampler inspired by the MPC3000.
+A virtual drum machine and sampler UI inspired by the MPC3000.
 
 ## Installation
 
