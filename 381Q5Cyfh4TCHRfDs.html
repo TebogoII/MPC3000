@@ -1,0 +1,167 @@
+<html><head><base href="https://mpc3000.io"><title>MPC3000.io - Virtual Drum Machine & Sampler</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .mpc-container {
+    background-color: #303030;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    padding: 20px;
+    width: 800px;
+  }
+  .lcd-screen {
+    background-color: #00ff00;
+    color: #000;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    text-align: left;
+  }
+  .pad-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .pad {
+    background-color: #505050;
+    border: none;
+    color: #fff;
+    padding: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.1s;
+    border-radius: 5px;
+  }
+  .pad:active {
+    background-color: #ff4081;
+    box-shadow: 0 0 15px #ff4081;
+    transform: scale(0.95);
+  }
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .knob {
+    width: 60px;
+    height: 60px;
+    background-color: #808080;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+  }
+  .knob::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    width: 4px;
+    height: 20px;
+    background-color: #fff;
+    transform-origin: bottom;
+  }
+  .transport {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .transport button {
+    background-color: #404040;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+</style>
+</head>
+<body>
+  <div class="mpc-container">
+    <div class="lcd-screen">
+      MPC3000.io v1.0<br>
+      BPM: 120 | Pattern: 01<br>
+      16 LEVELS MODE
+    </div>
+    <div class="pad-grid">
+      <button class="pad">PAD 1</button>
+      <button class="pad">PAD 2</button>
+      <button class="pad">PAD 3</button>
+      <button class="pad">PAD 4</button>
+      <button class="pad">PAD 5</button>
+      <button class="pad">PAD 6</button>
+      <button class="pad">PAD 7</button>
+      <button class="pad">PAD 8</button>
+      <button class="pad">PAD 9</button>
+      <button class="pad">PAD 10</button>
+      <button class="pad">PAD 11</button>
+      <button class="pad">PAD 12</button>
+      <button class="pad">PAD 13</button>
+      <button class="pad">PAD 14</button>
+      <button class="pad">PAD 15</button>
+      <button class="pad">PAD 16</button>
+    </div>
+    <div class="controls">
+      <div class="knob" title="Volume"></div>
+      <div class="knob" title="Tune"></div>
+      <div class="knob" title="Mix"></div>
+      <div class="knob" title="Pan"></div>
+      <div class="knob" title="Decay"></div>
+      <div class="knob" title="Attack"></div>
+    </div>
+    <div class="transport">
+      <button>REC</button>
+      <button>PLAY</button>
+      <button>STOP</button>
+      <button>OVERDUB</button>
+    </div>
+  </div>
+
+  <script>
+    const pads = document.querySelectorAll('.pad');
+    const knobs = document.querySelectorAll('.knob');
+    
+    pads.forEach(pad => {
+      pad.addEventListener('mousedown', () => {
+        pad.style.backgroundColor = '#ff4081';
+        pad.style.boxShadow = '0 0 15px #ff4081';
+      });
+      
+      pad.addEventListener('mouseup', () => {
+        pad.style.backgroundColor = '';
+        pad.style.boxShadow = '';
+      });
+    });
+    
+    knobs.forEach(knob => {
+      let rotation = 0;
+      let startAngle = 0;
+      
+      knob.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        startAngle = rotation - Math.atan2(knob.offsetWidth / 2 - e.clientX, knob.offsetHeight / 2 - e.clientY) * 180 / Math.PI;
+        
+        document.addEventListener('mousemove', rotateKnob);
+        document.addEventListener('mouseup', () => {
+          document.removeEventListener('mousemove', rotateKnob);
+        });
+      });
+      
+      function rotateKnob(e) {
+        rotation = Math.atan2(knob.offsetWidth / 2 - e.clientX, knob.offsetHeight / 2 - e.clientY) * 180 / Math.PI + startAngle;
+        rotation = Math.max(-150, Math.min(150, rotation));
+        knob.style.transform = `rotate(${rotation}deg)`;
+      }
+    });
+  </script>
+</body></html>
